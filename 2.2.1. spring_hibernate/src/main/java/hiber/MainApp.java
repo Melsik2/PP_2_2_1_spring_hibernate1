@@ -1,5 +1,5 @@
 package hiber;
-
+import hiber.model.Car;
 import hiber.config.AppConfig;
 import hiber.model.User;
 import hiber.service.UserService;
@@ -15,10 +15,10 @@ public class MainApp {
 
       UserService userService = context.getBean(UserService.class);
 
-      userService.add(new User("User1", "Lastname1", "user1@mail.ru"));
-      userService.add(new User("User2", "Lastname2", "user2@mail.ru"));
-      userService.add(new User("User3", "Lastname3", "user3@mail.ru"));
-      userService.add(new User("User4", "Lastname4", "user4@mail.ru"));
+      userService.add(new User("User1", "Lastname1", "user1@mail.ru", new Car("BMW", 3)));
+      userService.add(new User("User2", "Lastname2", "user2@mail.ru", new Car("Audi", 5)));
+      userService.add(new User("User3", "Lastname3", "user3@mail.ru", new Car("Lada", 2107)));
+      userService.add(new User("User4", "Lastname4", "user4@mail.ru", new Car("Toyota", 1)));
 
       List<User> users = userService.listUsers();
       for (User user : users) {
@@ -27,6 +27,12 @@ public class MainApp {
          System.out.println("Last Name = "+user.getLastName());
          System.out.println("Email = "+user.getEmail());
          System.out.println();
+      }
+      User user = userService.getUserByCar("Lada", 2107);
+      if (user != null) {
+         System.out.println("Пользователь с Lada 2107: " + user.getFirstName() + " " + user.getLastName());
+      } else {
+         System.out.println("Пользователь не найден");
       }
 
       context.close();
