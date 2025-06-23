@@ -1,5 +1,7 @@
 package hiber.model;
+
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "cars")
@@ -27,12 +29,12 @@ public class Car {
         return model;
     }
 
-    public void setModel(String model) {
-        this.model = model;
-    }
-
     public int getSeries() {
         return series;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 
     public void setSeries(int series) {
@@ -41,6 +43,19 @@ public class Car {
 
     @Override
     public String toString() {
-        return "Car{" + "model='" + model + '\'' + ", series=" + series + '}';
+        return "Car{model='" + model + "', series=" + series + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Car)) return false;
+        Car car = (Car) o;
+        return series == car.series && Objects.equals(model, car.model);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(model, series);
     }
 }
