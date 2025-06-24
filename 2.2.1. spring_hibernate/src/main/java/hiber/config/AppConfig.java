@@ -2,7 +2,6 @@ package hiber.config;
 
 import hiber.model.Car;
 import hiber.model.User;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
@@ -34,7 +33,7 @@ public class AppConfig {
    }
 
    @Bean
-   public LocalSessionFactoryBean getSessionFactory() {
+   public LocalSessionFactoryBean sessionFactory() {
       LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
       factoryBean.setDataSource(getDataSource());
 
@@ -45,16 +44,15 @@ public class AppConfig {
 
       factoryBean.setHibernateProperties(props);
       factoryBean.setAnnotatedClasses(User.class, Car.class);
+
       return factoryBean;
    }
 
    @Bean
-   public SessionFactory sessionFactory() {
-      return getSessionFactory().getObject();
-   }
-
-   @Bean
-   public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
-      return new HibernateTransactionManager(sessionFactory);
+   public HibernateTransactionManager transactionManager() {
+      HibernateTransactionManager txManager = new HibernateTransactionManager();
+      txManager.setSessionFactory(sessionFactory().getObject());
+      return txManager;
    }
 }
+
